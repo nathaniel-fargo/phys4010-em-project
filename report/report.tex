@@ -1,0 +1,70 @@
+\documentclass[11pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+
+% Page geometry settings
+\geometry{top=1in, bottom=1in, left=1in, right=1in}
+\setlength{\headheight}{13.6pt}
+
+% Header settings
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{PHYS 4010 Final Project}
+\lhead{Nathaniel Fargo}
+\cfoot{\thepage}
+\title{\textbf{The Shape of Potential: An Interactive Exploration of Multipole Expansions}}
+\author{Nathaniel Fargo \\ PHYS 4010: Electricity \& Magnetism}
+\date{December 2, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{What You're Looking At}
+
+The Multipole Expansion is a powerful tool in electrostatics, allowing approximations of the field of complex charge distributions without needing to know the precise location of every charge. By breaking a potential field into orthogonal components (namely monopoles, dipoles, quadrupoles, octupoles) we can describe complex asymmetries with a simple summation.
+
+This project, titled \textit{Interactive Multipole Superposition}, is a software simulation designed to visualize how these abstract mathematical terms combine to create physical fields. While the mathematics of the expansion are well-defined, the geometry of the superposition is often difficult to visualize. This tool allows for the dynamic adjustment of multipole moments, rendering the resulting scalar potential field in real-time. The goal is to provide a clear, visual link between the coefficients in the Legendre series and the resulting shape of the electric potential in space.
+
+\section{Theoretical Framework}
+
+The simulation displays the electrostatic potential $V(r, \theta)$ exterior to a localized charge distribution, where $r$ is the radial distance from the origin and $\theta$ is the polar angle. Assuming azimuthal symmetry, the general solution to Laplace's Equation is given by:
+
+\begin{equation}
+    V(r, \theta) = \sum_{l=0}^{\infty} \frac{B_l}{r^{l+1}} P_l(\cos\theta)
+\end{equation}
+
+In this equation, the summation $\sum_{l=0}^{\infty}$ adds together an infinite series of terms indexed by the integer $l$ (the multipole order). Each term contains three components: the coefficient $B_l$ (the multipole moment, which encodes information about the internal charge configuration), the radial decay factor $1/r^{l+1}$ (showing how each term diminishes with distance), and $P_l(\cos\theta)$ (the Legendre polynomial of order $l$, which determines the angular pattern). This exhibit focuses on the superposition of the first four terms ($l=0$ through $l=3$). 
+
+The Monopole term ($l=0$) decays as $1/r$ and possesses perfect spherical symmetry—since $P_0(\cos\theta) = 1$, there is no angular dependence. The Dipole term ($l=1$) decays as $1/r^2$ and introduces directional asymmetry through $P_1(\cos\theta) = \cos\theta$, creating a field with a positive lobe in one direction and a negative lobe in the opposite direction. The Quadrupole ($l=2$) and Octupole ($l=3$) terms introduce increasingly complex angular nodal surfaces through $P_2(\cos\theta) = \frac{1}{2}(3\cos^2\theta - 1)$ and $P_3(\cos\theta) = \frac{1}{2}(5\cos^3\theta - 3\cos\theta)$ respectively, and decay even more rapidly ($1/r^3$ and $1/r^4$).
+
+\section{Visualization Mechanics}
+
+The visualization is generated with Python by calculating the potential at each point on a fine grid ($260 \times 260$ points). To make the abstract scalar field $V$ visible, a colormap highlights positive potential in shades of red and negative potential in shades of blue, with regions with neutral potential left white.
+
+A critical feature of $1/r^n$ potentials is the singularity at the origin, where the mathematical series diverges. To address this, the display applies a radial mask $R < R_{min}$, marking the physical extent of the source charge distribution where the exterior expansion is no longer valid. White contour lines trace paths of constant potential, representing equipotential surfaces and providing a topological view of the field's structure.
+
+The interface allows anyone to manipulate the "weight" (coefficient $B_l$) of each term independently. The display shows the total field, as well as each of the components that make it up, which scale in size and intensity. This structure highlights how the complex total field is simply a linear sum of simpler geometric primitives.
+
+\section{Analysis and Applications}
+
+The visualization clarifies several physical behaviors that are less obvious in the algebraic derivation, specifically regarding the dominance of terms and symmetry breaking.
+
+One of the most immediate observations is the rapid radial decay of higher-order terms. Even when the Octupole coefficient is maximized and the Monopole coefficient is minimized, the complex lobed structure of the Octupole remains visible only very close to the origin. At greater distances, the spherical symmetry of the Monopole term—with its slower $1/r$ decay—completely dominates, washing out the higher-order details. This visual demonstration validates the standard approximation in physics that, at large distances, a complex charged object appears as a simple point charge (or a dipole, if net charge is zero).
+
+\section{Conclusion}
+
+The \textit{Multipole Weight Visualizer} bridges the gap between mathematical abstraction and physical intuition. By allowing users to isolate and recombine Legendre terms, the exhibit demonstrates that complex field geometries are often just the sum of simple, symmetric parts. Whether applied to the focusing of proton beams or the bonding of water molecules, the multipole expansion remains a fundamental framework for understanding the shape of potentials in the physical world.
+
+For a short video to see the interaction, check out https://github.com/nathaniel-fargo/PHYS4010-EM-Project/
+
+\end{document}
